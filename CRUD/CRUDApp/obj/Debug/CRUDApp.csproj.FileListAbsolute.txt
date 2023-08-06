@@ -1,0 +1,11 @@
+C:\Users\jpscott\Desktop\CRUD\CRUD\CRUDApp\bin\Debug\CRUDApp.exe.config
+C:\Users\jpscott\Desktop\CRUD\CRUD\CRUDApp\bin\Debug\CRUDApp.exe
+C:\Users\jpscott\Desktop\CRUD\CRUD\CRUDApp\bin\Debug\CRUDApp.pdb
+C:\Users\jpscott\Desktop\CRUD\CRUD\CRUDApp\obj\Debug\CRUDApp.csproj.AssemblyReference.cache
+C:\Users\jpscott\Desktop\CRUD\CRUD\CRUDApp\obj\Debug\CRUDApp.csproj.SuggestedBindingRedirects.cache
+C:\Users\jpscott\Desktop\CRUD\CRUD\CRUDApp\obj\Debug\CRUDApp.frmCRUD.resources
+C:\Users\jpscott\Desktop\CRUD\CRUD\CRUDApp\obj\Debug\CRUDApp.Properties.Resources.resources
+C:\Users\jpscott\Desktop\CRUD\CRUD\CRUDApp\obj\Debug\CRUDApp.csproj.GenerateResource.cache
+C:\Users\jpscott\Desktop\CRUD\CRUD\CRUDApp\obj\Debug\CRUDApp.csproj.CoreCompileInputs.cache
+C:\Users\jpscott\Desktop\CRUD\CRUD\CRUDApp\obj\Debug\CRUDApp.exe
+C:\Users\jpscott\Desktop\CRUD\CRUD\CRUDApp\obj\Debug\CRUDApp.pdb

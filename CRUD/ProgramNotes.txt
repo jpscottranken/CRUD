@@ -1,0 +1,297 @@
+0.	Create acme_widget database using SQL Server Object Explorer.
+
+1.	Open the SQL Server Object Explorer via the command:
+	View / SQL Server Object Explorer
+
+2.	Open the the Server named: (localdb)\MSSQLLocalDB
+
+3.	Right mouse-click on the Databases folder and
+	choose the Add New Database option.
+
+4.	Enter a  database name (for me it is/was acme_widget).
+
+	Note the database location (for me it is the following):
+	C:\Users\jpscott\AppData\Local\Microsoft\Microsoft SQL Server Local DB\Instances\MSSQLLocalDB
+
+	This is where your SQL Server database will be saved.
+
+5.	Right mouse-click on the new acme_widget database.
+	Choose the New Query option to open the query window.
+	
+	In the query window, enter the following, which
+	represents the employee database schema:
+	
+	CREATE TABLE employee (
+		employee_id INT IDENTITY(1,1) PRIMARY KEY,
+		first_name 	VARCHAR(50) NOT NULL,
+		last_name 	VARCHAR(50) NOT NULL,
+		address		VARCHAR(50) NOT NULL,
+		city		VARCHAR(50) NOT NULL,
+		state_code	CHAR(2)
+		zip			VARCHAR(15) NOT NULL,
+		phone		VARCHAR(15) NOT NULL,
+		dept_code	INT			NOT NULL,
+		salary		DECIMAL(11,2) NOT NULL
+	);
+
+6.	Populate the employee table with the following 30 random records:
+
+	INSERT INTO employee
+	(first_name, last_name, address, city, 
+	 state_code, zip, phone, dept_code, salary)
+	VALUES
+	('James	','	Smith','431 Cactus St.','Fairhope','AL','36532','(778) 207-8729',1,52639),
+	('Mary','Johnson','99 Valley Dr.','Mableton','GA ','30126','(827) 156-0741',2,83813),
+	('Robert','Williams','9 Cross St.','Riverside','NJ ','17109','(128) 104-9775',3,45376),
+	('Patricia','Brown','82 Lakeshore Street','Harrisburg','PA','45678','(886) 412-7235',4,62195),
+	('John','Jones','64 Bowman Street','Attleboro','MA','32703','(422) 038-9746',5,95845),
+	('Jennifer','Garcia','8186 Windfall St.','Anoka','MN','55303','(422) 886-2667',6,73568),
+	('Michael','Miller','900 Buckingham St.','Satellite Beach','FL','32937','(062) 957-5699',7,83271),
+	('Linda','Davis','335 South Howard Lane','Elgin','IL','60120','(343) 640-1943',7,84691),
+	('David','Rodriguez','796 High Point Street','Tuckerton','NJ','80870','(036) 685-3286',6,48660),
+	('Elizabeth','Martinez','39 Middle River Street','Atwater','CA','95301','(074) 910-3016',5,39200),
+	('William','Hernandez','149 Airport Road','Ridgewood','NJ','67450','(017) 407-3831',4,77173),
+	('Barbara','Lopez','8368 East Lakeshore St.','Ormond Beach','FL','32174','(733) 623-9653',3,72664),
+	('Richard','Gonzales','91 Manhattan Street','Clifton','NJ','70111','(180) 410-9932',2,81134),
+	('Susan','Wilson','121 Summer Street','Fort Walton Beach','FL','32547','(688) 022-0696',1,66382),
+	('Joseph','Anderson','9118 Hillcrest Dr.','Glen Cove','NY','11542','(944) 097-3256',2,83900),
+	('Jessica','Thomas','39 Wayne Dr.','Park Ridge','IL','60068','(731) 014-6163',3,87370),
+	('Thomas','Taylor','7766 Hilldale Road','Boston','MA','21271','(974) 833-7208',4,54899),
+	('Sarah','Moore','96 Fairway St.','East Stroudsburg','PA','18301','(608) 830-2264',5,63230),
+	('Christopher','Jackson','94 Penn Court','Haines City','FL','33844','(318) 815-3822',6,60953),
+	('Karen','Martin','850 Brookside St.','Rome','NY','13440','(518) 816-4373',7,56839),
+	('Charles','Lee','33 Arlington Dr.','Ft Mitchell','KY','41017','(270) 155-4134',1,52121),
+	('Lisa','Perez','8389 Manor Station Lane','Fishers','IN','46037','(255) 646-2977',6,68009),
+	('Daniel','Thompson','8 Edgefield Court','Carrollton','GA','30117','(773) 363-8402',5,37989),
+	('Nancy','White','78 Charles Ave.','Port Orange','FL','32127','(549) 086-0444',4,40502),
+	('Matthew','Harris','49 Durham Drive','Stockbridge','GA','30281','(106) 899-2770',3,34037),
+	('Betty','Sanchez','8804 North Greenrose St.','Pekasie','PA','18944','(765) 365-7097',2,53070),
+	('Anthony','Clark','668 York Drive','Anchorage','AK','99504','(013) 227-9441',1,61728),
+	('Sandra','Ramirez','29 East Ave.','Fort Washington','MD','20744','(406) 277-3816',7,56280),
+	('Mark','Lewis','75 Ridgeview Dr.','Canyon Country','CA','91387','(692) 075-1953',4,90289),
+	('Margaret','Robinson','188 Elmwood Drive','Hudsonville','MI','49426','(373) 276-8765',6,58289)
+
+7.	Build the GUI as shown.
+
+8.	Add this using statement at the top of the program:
+
+	using System.Data.SqlClient;
+	
+9.	Set these database variables at the top of the program:
+
+	// Create database variables
+	SqlConnection  sqlConn;
+	SqlCommand 	   sqlCmd;
+	SqlDataAdapter sqlDataAdapter;
+	DataTable 	   table;
+
+10.	Add this SetConnectionString Method at/near top of program:
+
+private void SetConnectionString
+{
+	var connString = @"Server=(localdb)\MSSQLLocalDB;Database=acme_widget;Integrated Security=SSPI";
+
+	// Create SqlConnection based on connString
+	conn = new SqlConnection(connString);
+
+	// Open Connection
+	conn.Open();
+}
+
+11.	Create the following 
+
+private void SetConnectionString()
+{
+	var connString = @"Server=(localdb)\MSSQLLocalDB;Database=acme_widget;Integrated Security=SSPI";
+
+	// Create SqlConnection based on connString
+	sqlConn = new SqlConnection(connString);
+
+	// Open Connection
+	sqlConn.Open();
+}
+
+12.	Call the new AttemptToAddNewRecord() method from both
+	the associated button and the associated menu option:
+
+private void AttemptToAddNewRecord()
+{
+	SetConnectionString();
+
+	try
+	{
+		sqlCmd = new SqlCommand("INSERT INTO employee VALUES (@first_name, @last_name, @address, @city, @state_code, @zip, @phone, @dept_code, @salary)", sqlConn);
+
+		sqlCmd.Parameters.AddWithValue("@first_name",   txtFirstName.Text);
+		sqlCmd.Parameters.AddWithValue("@last_name",    txtLastName.Text);
+		sqlCmd.Parameters.AddWithValue("@address",      txtAddress.Text);
+		sqlCmd.Parameters.AddWithValue("@city",         txtCity.Text);
+		sqlCmd.Parameters.AddWithValue("@state_code",   txtState.Text);
+		sqlCmd.Parameters.AddWithValue("@zip",          txtZip.Text);
+		sqlCmd.Parameters.AddWithValue("@phone",        txtPhone.Text);
+		sqlCmd.Parameters.AddWithValue("@dept_code",    Int32.Parse(txtDepartment.Text));
+		sqlCmd.Parameters.AddWithValue("@salary",       txtSalary.Text);
+
+		sqlCmd.ExecuteNonQuery();
+
+		sqlConn.Close();
+
+		MessageBox.Show("Record Successfully Saved");
+
+		UploadData();
+
+		ClearTheGUI();
+	}
+	catch (Exception ex)
+	{
+		ShowMessage("Error Attempting To Add Record\n\n" +
+					ex.Message,
+					"ERROR ADDING RECORD");
+
+		sqlConn.Close();
+	}
+}
+
+13.	Call the new AttemptToUpdateExistingRecord() method from both
+	the associated button and the associated menu option:
+
+private void AttemptToUpdateExistingRecord()
+{
+	SetConnectionString();
+
+	try
+	{
+		FillUpEmployeeTextBoxes();
+
+		sqlCmd = new SqlCommand("UPDATE employee SET first_name=@fn, last_name=@ln, address=@add, city=@ci, state_code=@st, zip=@z, phone=@ph, dept_code=@dc, salary=@sal WHERE employee_id=@eid", sqlConn);
+
+		sqlCmd.Parameters.AddWithValue("@eid", Int32.Parse(txtID.Text));
+		sqlCmd.Parameters.AddWithValue("@fn", txtFirstName.Text);
+		sqlCmd.Parameters.AddWithValue("@ln", txtLastName.Text);
+		sqlCmd.Parameters.AddWithValue("@add", txtAddress.Text);
+		sqlCmd.Parameters.AddWithValue("@ci", txtCity.Text);
+		sqlCmd.Parameters.AddWithValue("@st", txtState.Text);
+		sqlCmd.Parameters.AddWithValue("@z",  txtZip.Text);
+		sqlCmd.Parameters.AddWithValue("@ph", txtPhone.Text);
+		sqlCmd.Parameters.AddWithValue("@dc", Int32.Parse(txtDepartment.Text));
+		sqlCmd.Parameters.AddWithValue("@sal", Decimal.Parse(txtSalary.Text));
+
+		sqlCmd.ExecuteNonQuery();
+
+		sqlConn.Close();
+
+		MessageBox.Show("Record Successfully Updated");
+
+		UploadData();
+
+		ClearTheGUI();
+	}
+	catch (Exception ex)
+	{
+		ShowMessage("Error Attempting To Update Record\n\n" +
+					ex.Message,
+					"ERROR UPDATING RECORD");
+
+		sqlConn.Close();
+	}
+}
+
+14. Call the new AttemptToDeleteExistingRecord() method from both
+	the associated button and the associated menu option:
+
+private void AttemptToDeleteExistingRecord()
+{
+	SetConnectionString();
+
+	try
+	{
+		FillUpEmployeeTextBoxes();
+
+		sqlCmd = new SqlCommand("DELETE FROM employee WHERE employee_id=@id", sqlConn);
+
+		sqlCmd.Parameters.AddWithValue("@id", Int32.Parse(txtID.Text));
+
+		sqlCmd.ExecuteNonQuery();
+
+		sqlConn.Close();
+
+		MessageBox.Show("Record Successfully Deleted");
+
+		UploadData();
+
+		ClearTheGUI();
+	}
+	catch (Exception ex)
+	{
+		ShowMessage("Error Attempting To Delete Record\n\n" +
+					ex.Message,
+					"ERROR DELETING RECORD");
+
+		sqlConn.Close();
+	}
+}
+
+15. Add a new Search() method:
+
+private void SearchForRecordID(string id)
+{
+	SetConnectionString();
+
+	sqlCmd = new SqlCommand("SELECT * FROM employee WHERE employee_id=@id", sqlConn);
+	sqlCmd.Parameters.AddWithValue("@id", int.Parse(id));
+
+	DataView dv = table.DefaultView;
+	dv.RowFilter = string.Format("last_name LIKE '%{0}%'", id);
+	dgvAcmeWidget.DataSource = dv.ToTable();
+
+	sqlConn.Close();
+}
+
+16. Add a new UploadData() method to "redraw" the
+	DataGridView after any add, update, or delete:
+	
+	NOTE: This appears to be working/not working.
+
+private void UploadData()
+{
+	SetConnectionString();
+
+	sqlCmd = new SqlCommand();
+	sqlCmd.Connection = sqlConn;
+
+	sqlCmd.CommandText = "SELECT * FROM employee";
+
+	sqlReader = sqlCmd.ExecuteReader();
+
+	table = new DataTable();
+	table.Load(sqlReader);
+	sqlReader.Close();
+	sqlConn.Close();
+
+	dgvAcmeWidget.DataSource = table;
+}
+
+17.	Create the FillUpEmployeeTextBoxes() method
+	to copy the fields from the database to the
+	associated GUI textboxes.
+
+private void FillUpEmployeeTextBoxes()
+{
+	try
+	{
+		txtID.Text = dgvAcmeWidget.SelectedRows[0].Cells[0].Value.ToString();
+		txtFirstName.Text = dgvAcmeWidget.SelectedRows[0].Cells[1].Value.ToString();
+		txtLastName.Text = dgvAcmeWidget.SelectedRows[0].Cells[2].Value.ToString();
+		txtAddress.Text = dgvAcmeWidget.SelectedRows[0].Cells[3].Value.ToString();
+		txtCity.Text = dgvAcmeWidget.SelectedRows[0].Cells[4].Value.ToString();
+		txtState.Text = dgvAcmeWidget.SelectedRows[0].Cells[5].Value.ToString();
+		txtZip.Text = dgvAcmeWidget.SelectedRows[0].Cells[6].Value.ToString();
+		txtPhone.Text = dgvAcmeWidget.SelectedRows[0].Cells[7].Value.ToString();
+		txtDepartment.Text = dgvAcmeWidget.SelectedRows[0].Cells[8].Value.ToString();
+		txtSalary.Text = dgvAcmeWidget.SelectedRows[0].Cells[9].Value.ToString();
+	}
+	catch (Exception ex)
+	{
+		ShowMessage(ex.Message, "ERROR");
+	}
+
