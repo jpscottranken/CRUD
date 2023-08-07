@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualBasic;
-using System;
+﻿using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Forms;
@@ -9,16 +8,18 @@ namespace CRUDApp
     public partial class frmCRUD : Form
     {
         // Create database variables
-        SqlConnection sqlConn;
-        SqlCommand sqlCmd;
-        DataTable table;
-        SqlDataReader sqlReader = null;
+        SqlConnection sqlConn;              //  Connection to DB
+        SqlCommand    sqlCmd;               //  DB command
+        DataTable     table;                //  DB table
+        SqlDataReader sqlReader = null;     //  Data Reader
 
         public frmCRUD()
         {
             InitializeComponent();
         }
 
+        //  This method sets the connection string
+        //  and also opens the connection.
         private void SetConnectionString()
         {
             var connString = @"Server=(localdb)\MSSQLLocalDB;Database=acme_widget;Integrated Security=SSPI";
@@ -30,7 +31,6 @@ namespace CRUDApp
             sqlConn.Open();
         }
 
-
         private void btnAdd_Click(object sender, EventArgs e)
         {
             AttemptToAddNewRecord();
@@ -41,14 +41,20 @@ namespace CRUDApp
             AttemptToAddNewRecord();
         }
 
+        //  This method attempts to add the new
+        //  record to the acme_widget database.
+        //  Note: No validation is done here.
         private void AttemptToAddNewRecord()
         {
             SetConnectionString();
 
             try
             {
+                //  Set SQL insert command
                 sqlCmd = new SqlCommand("INSERT INTO employee VALUES (@first_name, @last_name, @address, @city, @state_code, @zip, @phone, @dept_code, @salary)", sqlConn);
 
+                //  "Map up" the @first_name, etc.
+                //  with their textbox equivalents
                 sqlCmd.Parameters.AddWithValue("@first_name",   txtFirstName.Text);
                 sqlCmd.Parameters.AddWithValue("@last_name",    txtLastName.Text);
                 sqlCmd.Parameters.AddWithValue("@address",      txtAddress.Text);
@@ -57,16 +63,19 @@ namespace CRUDApp
                 sqlCmd.Parameters.AddWithValue("@zip",          txtZip.Text);
                 sqlCmd.Parameters.AddWithValue("@phone",        txtPhone.Text);
                 sqlCmd.Parameters.AddWithValue("@dept_code",    Int32.Parse(txtDepartment.Text));
-                sqlCmd.Parameters.AddWithValue("@salary",       txtSalary.Text);
+                sqlCmd.Parameters.AddWithValue("@salary",       decimal.Parse(txtSalary.Text));
 
+                //  Add, update, delete
                 sqlCmd.ExecuteNonQuery();
 
                 sqlConn.Close();
 
                 MessageBox.Show("Record Successfully Saved");
 
+                //  Update the DataGridView
                 UploadData();
 
+                //  Clear out all textboxes in GUI
                 ClearTheGUI();
             }
             catch (Exception ex)
@@ -75,6 +84,7 @@ namespace CRUDApp
                             ex.Message,
                             "ERROR ADDING RECORD");
 
+                //  Close the database connection.
                 sqlConn.Close();
             }
         }
@@ -89,6 +99,10 @@ namespace CRUDApp
             AttemptToUpdateExistingRecord();
         }
 
+        //  This method attempts to update an
+        //  existing database record. Even after
+        //  multiple attempts to fix, this method
+        //  still does not work. Sorry about that.
         private void AttemptToUpdateExistingRecord()
         {
             SetConnectionString();
@@ -97,27 +111,34 @@ namespace CRUDApp
             {
                 FillUpEmployeeTextBoxes();
 
-                sqlCmd = new SqlCommand("UPDATE employee SET first_name=@fn, last_name=@ln, address=@add, city=@ci, state_code=@st, zip=@z, phone=@ph, dept_code=@dc, salary=@sal WHERE employee_id=@eid", sqlConn);
+                //  Set SQL update command
+                sqlCmd = new SqlCommand("UPDATE employee SET first_name=@first_name, last_name=@last_name, address=@address, city=@city, state_code=@state_code, zip=@zip, phone=@phone, dept_code=@dept_code, salary=@salary WHERE employee_id=@employee_id", sqlConn);
 
-                sqlCmd.Parameters.AddWithValue("@eid", Int32.Parse(txtID.Text));
-                sqlCmd.Parameters.AddWithValue("@fn", txtFirstName.Text);
-                sqlCmd.Parameters.AddWithValue("@ln", txtLastName.Text);
-                sqlCmd.Parameters.AddWithValue("@add", txtAddress.Text);
-                sqlCmd.Parameters.AddWithValue("@ci", txtCity.Text);
-                sqlCmd.Parameters.AddWithValue("@st", txtState.Text);
-                sqlCmd.Parameters.AddWithValue("@z",  txtZip.Text);
-                sqlCmd.Parameters.AddWithValue("@ph", txtPhone.Text);
-                sqlCmd.Parameters.AddWithValue("@dc", Int32.Parse(txtDepartment.Text));
-                sqlCmd.Parameters.AddWithValue("@sal", Decimal.Parse(txtSalary.Text));
+                //  "Map up" the @first_name, etc.
+                //  with their textbox equivalents
+                sqlCmd.Parameters.AddWithValue("@first_name",       txtFirstName.Text);
+                sqlCmd.Parameters.AddWithValue("@last_name ",       txtLastName.Text);
+                sqlCmd.Parameters.AddWithValue("@address",          txtAddress.Text);
+                sqlCmd.Parameters.AddWithValue("@city",             txtCity.Text);
+                sqlCmd.Parameters.AddWithValue("@state_code",       txtState.Text);
+                sqlCmd.Parameters.AddWithValue("@zip",              txtZip.Text);
+                sqlCmd.Parameters.AddWithValue("@phone",            txtPhone.Text);
+                sqlCmd.Parameters.AddWithValue("@dept_code",        Int32.Parse(txtDepartment.Text));
+                sqlCmd.Parameters.AddWithValue("@salary",           Decimal.Parse(txtSalary.Text));
+                sqlCmd.Parameters.AddWithValue("@employee_id",      Int32.Parse(txtID.Text));
 
+                //  Execute the query.
                 sqlCmd.ExecuteNonQuery();
 
+                //  Close the database connection.
                 sqlConn.Close();
 
                 MessageBox.Show("Record Successfully Updated");
 
+                //  Update the DataGridView
                 UploadData();
 
+                //  Clear out all textboxes in GUI
                 ClearTheGUI();
             }
             catch (Exception ex)
@@ -126,6 +147,7 @@ namespace CRUDApp
                             ex.Message,
                             "ERROR UPDATING RECORD");
 
+                //  Close the database connection.
                 sqlConn.Close();
             }
         }
@@ -140,6 +162,8 @@ namespace CRUDApp
             AttemptToDeleteExistingRecord();
         }
 
+        //  This method attempts to delete an
+        //  existing database record.
         private void AttemptToDeleteExistingRecord()
         {
             SetConnectionString();
@@ -148,18 +172,25 @@ namespace CRUDApp
             {
                 FillUpEmployeeTextBoxes();
 
+                //  Set SQL delete command
                 sqlCmd = new SqlCommand("DELETE FROM employee WHERE employee_id=@id", sqlConn);
 
+                //  "Map up" id with its
+                //  textbox equivalent.
                 sqlCmd.Parameters.AddWithValue("@id", Int32.Parse(txtID.Text));
 
+                //  Execute the query.
                 sqlCmd.ExecuteNonQuery();
 
+                //  Close the database connection.
                 sqlConn.Close();
 
                 MessageBox.Show("Record Successfully Deleted");
 
+                //  Update the DataGridView
                 UploadData();
 
+                //  Clear out all textboxes in GUI
                 ClearTheGUI();
             }
             catch (Exception ex)
@@ -168,10 +199,14 @@ namespace CRUDApp
                             ex.Message,
                             "ERROR DELETING RECORD");
 
+                //  Close the database connection.
                 sqlConn.Close();
             }
         }
 
+        //  This method should just set the
+        //  datagridview to the one desired
+        //  record. It does not work.
         private void SearchForRecordID(string id)
         {
             SetConnectionString();
@@ -186,6 +221,8 @@ namespace CRUDApp
             sqlConn.Close();
         }
 
+        //  This method updates the datagridview
+        //  by showing in it all employee records.
         private void UploadData()
         {
             SetConnectionString();
@@ -219,6 +256,9 @@ namespace CRUDApp
         {
             try
             {
+                //  Loop through all controls. If the
+                //  current control is a textbox, then
+                //  clear out its text contents.
                 foreach (Control c in gbEmployeeInfo.Controls)
                 {
                     if (c is TextBox)
@@ -284,6 +324,10 @@ namespace CRUDApp
             FillUpEmployeeTextBoxes();
         }
 
+        //  When the datagridview selected cell
+        //  is clicked (selected), fill up the
+        //  GUI textboxes with the associated
+        //  database fields.
         private void FillUpEmployeeTextBoxes()
         {
             try

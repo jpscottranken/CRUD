@@ -1,9 +1,15 @@
+NOTE: 	I changed some names and other things around
+		in the original program and added some more
+		comments to the program. Most of the program
+		works. Some of it (in particular the update
+		and the search) still does not work. Sorry.
+
 0.	Create acme_widget database using SQL Server Object Explorer.
 
 1.	Open the SQL Server Object Explorer via the command:
 	View / SQL Server Object Explorer
 
-2.	Open the the Server named: (localdb)\MSSQLLocalDB
+2.	Open the Server named: (localdb)\MSSQLLocalDB
 
 3.	Right mouse-click on the Databases folder and
 	choose the Add New Database option.
@@ -27,7 +33,7 @@
 		last_name 	VARCHAR(50) NOT NULL,
 		address		VARCHAR(50) NOT NULL,
 		city		VARCHAR(50) NOT NULL,
-		state_code	CHAR(2)
+		state_code	CHAR(2)     NOT NULL,
 		zip			VARCHAR(15) NOT NULL,
 		phone		VARCHAR(15) NOT NULL,
 		dept_code	INT			NOT NULL,
@@ -40,7 +46,7 @@
 	(first_name, last_name, address, city, 
 	 state_code, zip, phone, dept_code, salary)
 	VALUES
-	('James	','	Smith','431 Cactus St.','Fairhope','AL','36532','(778) 207-8729',1,52639),
+	('James	','Smith','431 Cactus St.','Fairhope','AL','36532','(778) 207-8729',1,52639),
 	('Mary','Johnson','99 Valley Dr.','Mableton','GA ','30126','(827) 156-0741',2,83813),
 	('Robert','Williams','9 Cross St.','Riverside','NJ ','17109','(128) 104-9775',3,45376),
 	('Patricia','Brown','82 Lakeshore Street','Harrisburg','PA','45678','(886) 412-7235',4,62195),
@@ -163,18 +169,17 @@ private void AttemptToUpdateExistingRecord()
 	{
 		FillUpEmployeeTextBoxes();
 
-		sqlCmd = new SqlCommand("UPDATE employee SET first_name=@fn, last_name=@ln, address=@add, city=@ci, state_code=@st, zip=@z, phone=@ph, dept_code=@dc, salary=@sal WHERE employee_id=@eid", sqlConn);
+		sqlCmd = new SqlCommand("UPDATE employee SET first_name=@first_name, last_name=@last_name, address=@address, city=@ciity, state_code=@state_code, zip=@zip, phone=@phone, dept_code=@dept_code, salary=@salary WHERE employee_id=@employee_id", sqlConn);
 
-		sqlCmd.Parameters.AddWithValue("@eid", Int32.Parse(txtID.Text));
-		sqlCmd.Parameters.AddWithValue("@fn", txtFirstName.Text);
-		sqlCmd.Parameters.AddWithValue("@ln", txtLastName.Text);
-		sqlCmd.Parameters.AddWithValue("@add", txtAddress.Text);
-		sqlCmd.Parameters.AddWithValue("@ci", txtCity.Text);
-		sqlCmd.Parameters.AddWithValue("@st", txtState.Text);
-		sqlCmd.Parameters.AddWithValue("@z",  txtZip.Text);
-		sqlCmd.Parameters.AddWithValue("@ph", txtPhone.Text);
-		sqlCmd.Parameters.AddWithValue("@dc", Int32.Parse(txtDepartment.Text));
-		sqlCmd.Parameters.AddWithValue("@sal", Decimal.Parse(txtSalary.Text));
+		sqlCmd.Parameters.AddWithValue("@first_name",   txtFirstName.Text);
+		sqlCmd.Parameters.AddWithValue("@last_name",    txtLastName.Text);
+		sqlCmd.Parameters.AddWithValue("@address",      txtAddress.Text);
+		sqlCmd.Parameters.AddWithValue("@city",         txtCity.Text);
+		sqlCmd.Parameters.AddWithValue("@state_code",   txtState.Text);
+		sqlCmd.Parameters.AddWithValue("@zip",          txtZip.Text);
+		sqlCmd.Parameters.AddWithValue("@phone",        txtPhone.Text);
+		sqlCmd.Parameters.AddWithValue("@dept_code",    Int32.Parse(txtDepartment.Text));
+		sqlCmd.Parameters.AddWithValue("@salary",       txtSalary.Text);
 
 		sqlCmd.ExecuteNonQuery();
 
@@ -279,16 +284,16 @@ private void FillUpEmployeeTextBoxes()
 {
 	try
 	{
-		txtID.Text = dgvAcmeWidget.SelectedRows[0].Cells[0].Value.ToString();
-		txtFirstName.Text = dgvAcmeWidget.SelectedRows[0].Cells[1].Value.ToString();
-		txtLastName.Text = dgvAcmeWidget.SelectedRows[0].Cells[2].Value.ToString();
-		txtAddress.Text = dgvAcmeWidget.SelectedRows[0].Cells[3].Value.ToString();
-		txtCity.Text = dgvAcmeWidget.SelectedRows[0].Cells[4].Value.ToString();
-		txtState.Text = dgvAcmeWidget.SelectedRows[0].Cells[5].Value.ToString();
-		txtZip.Text = dgvAcmeWidget.SelectedRows[0].Cells[6].Value.ToString();
-		txtPhone.Text = dgvAcmeWidget.SelectedRows[0].Cells[7].Value.ToString();
-		txtDepartment.Text = dgvAcmeWidget.SelectedRows[0].Cells[8].Value.ToString();
-		txtSalary.Text = dgvAcmeWidget.SelectedRows[0].Cells[9].Value.ToString();
+		txtID.Text 			= dgvAcmeWidget.SelectedRows[0].Cells[0].Value.ToString();
+		txtFirstName.Text 	= dgvAcmeWidget.SelectedRows[0].Cells[1].Value.ToString();
+		txtLastName.Text 	= dgvAcmeWidget.SelectedRows[0].Cells[2].Value.ToString();
+		txtAddress.Text 	= dgvAcmeWidget.SelectedRows[0].Cells[3].Value.ToString();
+		txtCity.Text 		= dgvAcmeWidget.SelectedRows[0].Cells[4].Value.ToString();
+		txtState.Text 		= dgvAcmeWidget.SelectedRows[0].Cells[5].Value.ToString();
+		txtZip.Text 		= dgvAcmeWidget.SelectedRows[0].Cells[6].Value.ToString();
+		txtPhone.Text 		= dgvAcmeWidget.SelectedRows[0].Cells[7].Value.ToString();
+		txtDepartment.Text 	= dgvAcmeWidget.SelectedRows[0].Cells[8].Value.ToString();
+		txtSalary.Text 		= dgvAcmeWidget.SelectedRows[0].Cells[9].Value.ToString();
 	}
 	catch (Exception ex)
 	{

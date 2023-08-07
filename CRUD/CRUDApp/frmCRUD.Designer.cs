@@ -56,8 +56,8 @@
             this.clearMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gbEmployeeInfo = new System.Windows.Forms.GroupBox();
-            this.lblEmployeeID = new System.Windows.Forms.Label();
             this.txtID = new System.Windows.Forms.TextBox();
+            this.lblEmployeeID = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAcmeWidget)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.gbEmployeeInfo.SuspendLayout();
@@ -289,21 +289,21 @@
             // addMenuItem
             // 
             this.addMenuItem.Name = "addMenuItem";
-            this.addMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.addMenuItem.Size = new System.Drawing.Size(112, 22);
             this.addMenuItem.Text = "&Add";
             this.addMenuItem.Click += new System.EventHandler(this.addMenuItem_Click);
             // 
             // updateMenuItem
             // 
             this.updateMenuItem.Name = "updateMenuItem";
-            this.updateMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.updateMenuItem.Size = new System.Drawing.Size(112, 22);
             this.updateMenuItem.Text = "&Update";
             this.updateMenuItem.Click += new System.EventHandler(this.updateMenuItem_Click);
             // 
             // deleteMenuItem
             // 
             this.deleteMenuItem.Name = "deleteMenuItem";
-            this.deleteMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.deleteMenuItem.Size = new System.Drawing.Size(112, 22);
             this.deleteMenuItem.Text = "&Delete";
             this.deleteMenuItem.Click += new System.EventHandler(this.deleteMenuItem_Click);
             // 
@@ -347,6 +347,16 @@
             this.gbEmployeeInfo.TabStop = false;
             this.gbEmployeeInfo.Text = "Employee Information";
             // 
+            // txtID
+            // 
+            this.txtID.Font = new System.Drawing.Font("Arial Narrow", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtID.Location = new System.Drawing.Point(341, 31);
+            this.txtID.Name = "txtID";
+            this.txtID.ReadOnly = true;
+            this.txtID.Size = new System.Drawing.Size(261, 44);
+            this.txtID.TabIndex = 21;
+            this.txtID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // lblEmployeeID
             // 
             this.lblEmployeeID.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
@@ -357,16 +367,6 @@
             this.lblEmployeeID.TabIndex = 20;
             this.lblEmployeeID.Text = "Employee ID:";
             this.lblEmployeeID.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // txtID
-            // 
-            this.txtID.Font = new System.Drawing.Font("Arial Narrow", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtID.Location = new System.Drawing.Point(341, 31);
-            this.txtID.Name = "txtID";
-            this.txtID.ReadOnly = true;
-            this.txtID.Size = new System.Drawing.Size(261, 44);
-            this.txtID.TabIndex = 21;
-            this.txtID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // frmCRUD
             // 
